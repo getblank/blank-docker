@@ -6,11 +6,8 @@ RUN go get -u github.com/jteeuwen/go-bindata/...
 RUN go get -d github.com/getblank/blank-router \
 && cd $GOPATH/src/github.com/getblank/blank-router \
 && go generate \
-&& go get -u -v \
-&& go install
-
-WORKDIR /go/bin
+&& go get -u
 
 EXPOSE 2345
 
-CMD ./blank-router -s ws://blank-sr:1234
+CMD blank-router -s ws://blank-sr:1234
