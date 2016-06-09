@@ -35,6 +35,6 @@ before_install:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - sed -i 's/\/data/\'"$TRAVIS_BUILD_DIR"'\/data/' docker-compose.yml
+  - sed -i 's/\/data/\'"${TRAVIS_BUILD_DIR}"'\/data/' docker-compose.yml
   - docker-compose build
   - docker-compose up -d
