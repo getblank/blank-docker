@@ -4,16 +4,82 @@ services:
         container_name: blank-sr
         build: ./blank-sr/.
         image: getblank/blank-sr
+        volumes:
+            - /data/blank-sr:/app
+            - /etc/localtime:/etc/localtime
         expose:
-        - "1234"
+            - "1234"
+        restart: always
     blank-router:
         container_name: blank-router
         build: ./blank-router/.
         image: getblank/blank-router
         expose:
-        - "2345"
+            - "2345"
         ports:
-        - "8080:8080"
+            - "8080:8080"
         links:
-        - "blank-sr:blank-sr"
-
+            - blank-sr
+        volumes:
+            - /etc/localtime:/etc/localtime
+        restart: always
+    blank-cron:
+        container_name: blank-cron
+        build: ./blank-cron/.
+        image: getblank/blank-cron
+        links:
+            - blank-sr
+        volumes:
+            - /etc/localtime:/etc/localtime
+    blank-filestore:
+        container_name: blank-filestore
+        build: ./blank-filestore/.
+        image: getblank/blank-filestore
+        expose:
+            - "8082"
+        volumes:
+            - /data/blank-filestore:/app
+            - /etc/localtime:/etc/localtime
+        links:
+            - blank-sr
+        restart: always
+    blank-node-worker:
+        container_name: blank-node-worker-1
+        build: ./blank-node-worker/.
+        image: getblank/blank-node-worker
+        volumes:
+            - /data/blank-node-worker:/app
+            - /etc/localtime:/etc/localtime
+        depends_on:
+            - "mongo"
+        links:
+            - blank-sr
+            - mongo
+        environment:
+            SR: ws://blank-sr:1234
+            MONGO_PORT_27017_TCP_ADDR: mongo
+            MONGO_PORT_27017_TCP_PORT: 27017
+        restart: always
+    mongo:
+        container_name: mongo
+        image: mongo:latest
+        volumes:
+            - /data/mongodb:/data/db
+            - /etc/localtime:/etc/localtime
+        expose:
+            - "27017"
+        restart: always
+    # commercial modules
+    # blank-pbx:
+    #     container_name: blank-pbx
+    #     image: alpine
+    #     expose:
+    #         - "8022"
+    #     volumes:
+    #         - /data/blank-pbx:/app
+    #         - /etc/localtime:/etc/localtime
+    #     working_dir: /app
+    #     links:
+    #         - blank-sr
+    #     command: ./blank-pbx -s ws://blank-sr:1234
+    #     restart: always
