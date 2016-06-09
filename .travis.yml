@@ -22,18 +22,19 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   # install blank-node-worker
-  - mkdir /data
-  - cd /data
+  - mkdir $TRAVIS_BUILD_DIR/data
+  - cd $TRAVIS_BUILD_DIR/data
   - git clone https://github.com/getblank/blank-node-worker.git
   - cd blank-node-worker
   - npm install
   # blank-sr, filestore
-  - mkdir /data/blank-sr
-  - mkdir /data/blank-filestore
+  - mkdir $TRAVIS_BUILD_DIR/data/blank-sr
+  - mkdir $TRAVIS_BUILD_DIR/data/blank-filestore
   # mongo
-  - mkdir /data/mongodb
+  - mkdir $TRAVIS_BUILD_DIR/data/mongodb
 
 script:
   - cd $TRAVIS_BUILD_DIR
+  - sed -i 's/\/data/\'"$TRAVIS_BUILD_DIR"'\/data/' docker-compose.yml
   - docker-compose build
   - docker-compose up -d
