@@ -35,6 +35,6 @@ before_install:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - perl -w -p -i -e 's/\/data/\'"${TRAVIS_BUILD_DIR}"'\/data/' docker-compose.yml
+  - sh travis.sh
   - docker-compose build
   - docker-compose up -d

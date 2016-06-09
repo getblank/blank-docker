@@ -1,0 +1,1 @@
+sed -i 's/\/data/\'"${TRAVIS_BUILD_DIR}"'\/data/' docker-compose.yml
