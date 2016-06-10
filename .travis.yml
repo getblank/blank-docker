@@ -35,6 +35,6 @@ before_install:
 
 script:
   - cd $TRAVIS_BUILD_DIR
-  - sh travis.sh
+  # - sh travis.sh
   - docker-compose build
   - docker-compose up -d
