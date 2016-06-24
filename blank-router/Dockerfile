@@ -1,12 +1,8 @@
-FROM golang:1.6
+FROM getblank/busybox
 MAINTAINER Opryshko Alexandr <sclif13@gmail.com>
 
-RUN go get -u github.com/jteeuwen/go-bindata/...
-
-RUN go get -d github.com/getblank/blank-router \
-&& cd $GOPATH/src/github.com/getblank/blank-router \
-&& go generate \
-&& go get -u
+RUN wget http://releases.getblank.net/blank-router/linux/blank-router -O /bin/blank-router \
+&& chmod +x /bin/blank-router
 
 EXPOSE 2345
 

@@ -10,6 +10,8 @@ services:
         expose:
             - "1234"
         restart: always
+        depends_on:
+            - "mongo"
     blank-router:
         container_name: blank-router
         build: ./blank-router/.
@@ -23,6 +25,8 @@ services:
         volumes:
             - /etc/localtime:/etc/localtime
         restart: always
+        depends_on:
+            - "mongo"
     blank-cron:
         container_name: blank-cron
         build: ./blank-cron/.
@@ -31,18 +35,22 @@ services:
             - blank-sr
         volumes:
             - /etc/localtime:/etc/localtime
-    blank-filestore:
-        container_name: blank-filestore
-        build: ./blank-filestore/.
-        image: getblank/blank-filestore
+        depends_on:
+            - "mongo"
+    blank-fs:
+        container_name: blank-fs
+        build: ./blank-fs/.
+        image: getblank/blank-fs
         expose:
             - "8082"
         volumes:
-            - /data/blank-filestore:/app
+            - /data/blank-fs:/app
             - /etc/localtime:/etc/localtime
         links:
             - blank-sr
         restart: always
+        depends_on:
+            - "mongo"
     blank-node-worker:
         container_name: blank-node-worker-1
         build: ./blank-node-worker/.
@@ -56,7 +64,7 @@ services:
             - blank-sr
             - mongo
         environment:
-            SR: ws://blank-sr:1234
+            BLANK_SERVICE_REGISTRY: ws://blank-sr:1234
             MONGO_PORT_27017_TCP_ADDR: mongo
             MONGO_PORT_27017_TCP_PORT: 27017
         restart: always
@@ -72,7 +80,7 @@ services:
     # commercial modules
     # blank-pbx:
     #     container_name: blank-pbx
-    #     image: alpine
+    #     image: getblank/busybox
     #     expose:
     #         - "8022"
     #     volumes:
@@ -83,3 +91,5 @@ services:
     #         - blank-sr
     #     command: ./blank-pbx -s ws://blank-sr:1234
     #     restart: always
+    #     depends_on:
+    #         - "mongo"
