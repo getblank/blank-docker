@@ -68,6 +68,20 @@ services:
             MONGO_PORT_27017_TCP_ADDR: mongo
             MONGO_PORT_27017_TCP_PORT: 27017
         restart: always
+    blank-queue:
+        container_name: blank-queue
+        build: ./blank-queue/.
+        image: getblank/blank-queue
+        expose:
+            - "8083"
+        volumes:
+            - /data/blank-queue:/app
+            - /etc/localtime:/etc/localtime
+        links:
+            - blank-sr
+        restart: always
+        depends_on:
+            - "mongo"
     mongo:
         container_name: mongo
         image: mongo:latest
