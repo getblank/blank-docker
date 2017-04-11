@@ -6,7 +6,7 @@ services:
         image: getblank/blank-sr
         volumes:
             - /data/blank-sr:/app
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         expose:
             - "1234"
         restart: always
@@ -23,7 +23,7 @@ services:
         links:
             - blank-sr
         volumes:
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         restart: always
         depends_on:
             - "mongo"
@@ -34,7 +34,7 @@ services:
         links:
             - blank-sr
         volumes:
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         depends_on:
             - "mongo"
     blank-fs:
@@ -45,7 +45,7 @@ services:
             - "8082"
         volumes:
             - /data/blank-fs:/app
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         links:
             - blank-sr
         restart: always
@@ -57,7 +57,7 @@ services:
         image: getblank/blank-node-worker
         volumes:
             - /data/blank-node-worker:/app
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         depends_on:
             - "mongo"
         links:
@@ -76,7 +76,7 @@ services:
             - "8083"
         volumes:
             - /data/blank-queue:/app
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         links:
             - blank-sr
         restart: always
@@ -87,7 +87,7 @@ services:
         image: mongo:latest
         volumes:
             - /data/mongodb:/data/db
-            - /etc/localtime:/etc/localtime
+            - /etc/localtime:/etc/localtime:ro
         expose:
             - "27017"
         restart: always
@@ -99,7 +99,7 @@ services:
     #         - "8022"
     #     volumes:
     #         - /data/blank-pbx:/app
-    #         - /etc/localtime:/etc/localtime
+    #         - /etc/localtime:/etc/localtime:ro
     #     working_dir: /app
     #     links:
     #         - blank-sr
